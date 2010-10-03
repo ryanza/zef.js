@@ -1,1 +1,4 @@
-%div Form will go here
+%div#form
+  %form{action: "/s", method: "post", id: "zef-form"}
+    %input.text-field{ name: "url" }
+    %input.button{type: "submit", value: "Shorten"}

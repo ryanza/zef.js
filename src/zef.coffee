@@ -11,5 +11,9 @@ app.configure 'development', ->
 
 app.get '/', (req, res) ->
 	res.render "index.haml"
+	
+app.post '/s', (req, res) ->
+	console.log req.body.url
+	res.redirect 'back'
 
 app.listen 3000

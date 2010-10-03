@@ -12,6 +12,10 @@ app.configure('development', function() {
   }));
 });
 app.get('/', function(req, res) {
-	res.render("index.haml");
+  return res.render("index.haml");
+});
+app.post('/s', function(req, res) {
+  console.log(req.body.url);
+  return res.redirect('back');
 });
 app.listen(3000);
