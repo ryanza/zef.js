@@ -10,25 +10,12 @@ db.debug_mode = true;
 app.configure ->
   app.use(express.bodyDecoder())
   app.register '.haml', require 'hamljs'
-  
-app.configure 'development', ->
-  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }))
 
 app.get '/', (req, res) ->
   res.render "index.haml"
   
-app.get '/:short', (req, res) ->
-  key = req.params.short
-  
-  db.get key, (err, reply) ->
-    unless reply
-      res.redirect '/'
-    else
-      console.log(reply.toString())
-      res.send(reply.toString())
-  
-app.post '/s', (req, res) ->
-  url = req.body.url
+app.post '/', (req, res) ->
+  url = if req.body.url.search(/^http/) == -1 then "http://" + req.body.url else req.body.url    
   
   db.get url, (err, reply) ->
     if reply
@@ -40,5 +27,14 @@ app.post '/s', (req, res) ->
         db.set key, url, (err, reply) ->
           db.set url, key, (reply) ->
             res.send(key)
+
+app.get '/:short', (req, res) ->
+  key = req.params.short
+
+  db.get key, (err, reply) ->
+    unless reply
+      res.redirect '/'
+    else
+      res.redirect reply.toString()
     
 app.listen 3000
